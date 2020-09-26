@@ -6,17 +6,18 @@
           type="text"
           class="search-bar"
           placeholder="Search location..."
+          v-model="query"
+          @keypress="fetchWeather"
         />
       </div>
       <div class="weather-wrap">
-
         <div class="location-box">
           <div class="location">Sydney, AU</div>
           <div class="date">Sat 26 September</div>
         </div>
 
         <div class="weather-box">
-          <div class="temperature">26°c</div>
+          <div class="temp">26°c</div>
           <div class="weather">Sunny</div>
         </div>
       </div>
@@ -25,12 +26,30 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "App",
   data() {
     return {
       api_key: "6fbbe641ce030c39837ac25233abca8c",
+      url: "http://api.openweathermap.org/data/2.5/weather?q=",
     };
+  },
+  query: "",
+  weather: {},
+  methods: {
+    fetchWeather(e) {
+      if (e.key == "Enter") {
+       axios
+          .get(
+            `${this.url}${this.query}&appid=${this.api_key}&units=metric`
+          )
+          .then((res) => console.log(res.data))
+          
+          .catch((err) =>console.log(err))
+        
+      }
+    },
   },
 };
 </script>
@@ -63,11 +82,11 @@ main {
   display: block;
   width: 100%;
   padding: 15px;
-  
+
   color: #313131;
   font-size: 20px;
   appearance: none;
-  border:none;
+  border: none;
   outline: none;
   background: none;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
@@ -81,14 +100,14 @@ main {
   border-radius: 16px 0px 16px 0px;
 }
 .location-box .location {
-  color: #FFF;
+  color: #fff;
   font-size: 32px;
   font-weight: 500;
   text-align: center;
   text-shadow: 1px 3px rgba(0, 0, 0, 0.25);
 }
 .location-box .date {
-  color: #FFF;
+  color: #fff;
   font-size: 20px;
   font-weight: 300;
   font-style: italic;
@@ -100,17 +119,17 @@ main {
 .weather-box .temp {
   display: inline-block;
   padding: 10px 25px;
-  color: #FFF;
+  color: #fff;
   font-size: 102px;
   font-weight: 900;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
-  background-color:rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);
   border-radius: 16px;
   margin: 30px 0px;
   box-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
 .weather-box .weather {
-  color: #FFF;
+  color: #fff;
   font-size: 48px;
   font-weight: 700;
   font-style: italic;
