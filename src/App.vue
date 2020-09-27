@@ -10,9 +10,9 @@
           @keypress="fetchWeather"
         />
       </div>
-      <div class="weather-wrap">
+      <div class="weather-wrap" >
         <div class="location-box">
-          <div class="location">Sydney, AU</div>
+          <div class="location">{{weather.name}},{{weather.sys.country}}</div>
           <div class="date">Sat 26 September</div>
         </div>
 
@@ -33,23 +33,24 @@ export default {
     return {
       api_key: "6fbbe641ce030c39837ac25233abca8c",
       url: "http://api.openweathermap.org/data/2.5/weather?q=",
+      query: '',
+      weather: {}
     };
   },
-  query: "",
-  weather: {},
+  
   methods: {
-    fetchWeather(e) {
+   fetchWeather(e) {
       if (e.key == "Enter") {
-       axios
-          .get(
+       axios.get(
             `${this.url}${this.query}&appid=${this.api_key}&units=metric`
           )
-          .then((res) => console.log(res.data))
+
+          .then(res => this.weather = res.data)
           
           .catch((err) =>console.log(err))
         
       }
-    },
+    }
   },
 };
 </script>
