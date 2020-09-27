@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    :class="typeof weather.main !== 'undefined' && weather.main.temp > 20 ? 'warm': '' "
+    :class="typeof weather.main !== 'undefined' && weather.weather[0].main === 'Clear' ? 'clear': '' "
   >
     <main>
       <div class="search-box">
@@ -42,6 +42,10 @@ export default {
       weather: {},
     };
   },
+  mounted(){
+    axios.get(`${this.url}Sydney&appid=${this.api_key}&units=metric`)
+    .then((res) => (this.weather = res.data))
+  },
 
   methods: {
     async fetchWeather(e) {
@@ -72,22 +76,22 @@ body {
   font-family: "monserat", sans-serif;
 }
 #app {
-  background-image: url("./assets/cold-bg.jpg");
+  background-image: url("./assets/cloudy.jpeg");
   background-size: cover;
   background-position: bottom;
   transition: 0.4s;
 }
 
-#app.warm {
-  background-image: url("./assets/warm-bg.jpg");
+#app.clear {
+  background-image: url("./assets/clear.jpg");
 }
 main {
   min-height: 100vh;
   padding: 25px;
   background-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.25),
-    rgba(0, 0, 0, 0.75)
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15)
   );
 }
 .search-box {
