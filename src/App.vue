@@ -1,7 +1,11 @@
 <template>
   <div
     id="app"
-    :class="typeof weather.main !== 'undefined' && weather.weather[0].main === 'Clear' ? 'clear': '' "
+    :class="
+      typeof weather.main !== 'undefined' && weather.weather[0].main === 'Clear'
+        ? 'clear'
+        : ''
+    "
   >
     <main>
       <div class="search-box">
@@ -17,13 +21,16 @@
         <div class="location-box">
           <div class="location">
             {{ weather.name }},{{ weather.sys.country }}
+            <img width="50px" :src="iconSrc" />
           </div>
           <div class="date">{{ getDate() }}</div>
         </div>
 
         <div class="weather-box">
           <div class="temp">{{ Math.round(weather.main.temp) }}°c</div>
-          <div class="weather">{{ weather.weather[0].main }}</div>
+          <div class="weather">{{ weather.weather[0].description }}</div>
+          <div class="high">{{ weather.main.temp_max }}</div>
+          <div class="low">{{ weather.main.temp_min }}</div>
         </div>
       </div>
     </main>
@@ -40,11 +47,19 @@ export default {
       url: "http://api.openweathermap.org/data/2.5/weather?q=",
       query: "",
       weather: {},
+      iconSrc: "",
     };
   },
-  mounted(){
-    axios.get(`${this.url}Sydney&appid=${this.api_key}&units=metric`)
-    .then((res) => (this.weather = res.data))
+  mounted() {
+    axios
+      .get(`${this.url}Sydney&appid=${this.api_key}&units=metric`)
+      .then((res) => {
+        this.weather = res.data;
+        this.iconSrc = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
+        console.log(this.iconSrc);
+      })
+      .catch((error) => console.log(error));
+    // console.log(this.weather);
   },
 
   methods: {
@@ -53,7 +68,11 @@ export default {
         await axios
           .get(`${this.url}${this.query}&appid=${this.api_key}&units=metric`)
 
-          .then((res) => (this.weather = res.data))
+          .then((res) => {
+            this.weather = res.data;
+            this.iconSrc = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
+            console.log(this.iconSrc);
+          })
 
           .catch((err) => console.log(err));
       }
