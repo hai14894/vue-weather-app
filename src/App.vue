@@ -5,20 +5,20 @@
         <input
           type="text"
           class="search-bar"
-          placeholder="Search location..."
+          placeholder="Search by city name..."
           v-model="query"
           @keypress="fetchWeather"
         />
       </div>
-      <div class="weather-wrap" >
+      <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
         <div class="location-box">
           <div class="location">{{weather.name}},{{weather.sys.country}}</div>
-          <div class="date">Sat 26 September</div>
+          <div class="date">{{getDate()}}</div>
         </div>
 
         <div class="weather-box">
-          <div class="temp">26°c</div>
-          <div class="weather">Sunny</div>
+          <div class="temp">{{Math.round(weather.main.temp)}}°c</div>
+          <div class="weather">{{weather.weather[0].main}}</div>
         </div>
       </div>
     </main>
@@ -50,7 +50,11 @@ export default {
           .catch((err) =>console.log(err))
         
       }
-    }
+    },
+  getDate(){
+     let today = new Date().toLocaleDateString()
+     return today
+  }
   },
 };
 </script>
