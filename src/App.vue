@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    :class="typeof weather.main !== 'undefined' && weather.main.temp > 20 ? 'warm': '' "
+  >
     <main>
       <div class="search-box">
         <input
@@ -10,15 +13,17 @@
           @keypress="fetchWeather"
         />
       </div>
-      <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
+      <div class="weather-wrap" v-if="typeof weather.main !== 'undefined'">
         <div class="location-box">
-          <div class="location">{{weather.name}},{{weather.sys.country}}</div>
-          <div class="date">{{getDate()}}</div>
+          <div class="location">
+            {{ weather.name }},{{ weather.sys.country }}
+          </div>
+          <div class="date">{{ getDate() }}</div>
         </div>
 
         <div class="weather-box">
-          <div class="temp">{{Math.round(weather.main.temp)}}°c</div>
-          <div class="weather">{{weather.weather[0].main}}</div>
+          <div class="temp">{{ Math.round(weather.main.temp) }}°c</div>
+          <div class="weather">{{ weather.weather[0].main }}</div>
         </div>
       </div>
     </main>
@@ -33,28 +38,26 @@ export default {
     return {
       api_key: "6fbbe641ce030c39837ac25233abca8c",
       url: "http://api.openweathermap.org/data/2.5/weather?q=",
-      query: '',
-      weather: {}
+      query: "",
+      weather: {},
     };
   },
-  
-  methods: {
-   fetchWeather(e) {
-      if (e.key == "Enter") {
-       axios.get(
-            `${this.url}${this.query}&appid=${this.api_key}&units=metric`
-          )
 
-          .then(res => this.weather = res.data)
-          
-          .catch((err) =>console.log(err))
-        
+  methods: {
+    async fetchWeather(e) {
+      if (e.key == "Enter") {
+        await axios
+          .get(`${this.url}${this.query}&appid=${this.api_key}&units=metric`)
+
+          .then((res) => (this.weather = res.data))
+
+          .catch((err) => console.log(err));
       }
     },
-  getDate(){
-     let today = new Date().toLocaleDateString()
-     return today
-  }
+    getDate() {
+      let today = new Date().toLocaleDateString();
+      return today;
+    },
   },
 };
 </script>
@@ -69,6 +72,14 @@ body {
   font-family: "monserat", sans-serif;
 }
 #app {
+  background-image: url("./assets/cold-bg.jpg");
+  background-size: cover;
+  background-position: bottom;
+  transition: 0.4s;
+}
+
+#app.warm {
+  background-image: url("./assets/warm-bg.jpg");
 }
 main {
   min-height: 100vh;
