@@ -21,16 +21,19 @@
         <div class="location-box">
           <div class="location">
             {{ weather.name }},{{ weather.sys.country }}
-            <img width="50px" :src="iconSrc" />
+            
           </div>
           <div class="date">{{ getDate() }}</div>
         </div>
 
         <div class="weather-box">
-          <div class="temp">{{ Math.round(weather.main.temp) }}°c</div>
+          <div class="temp">{{ Math.round(weather.main.temp) }}°c<img width="100px" :src="iconSrc" /></div>
           <div class="weather">{{ weather.weather[0].description }}</div>
-          <div class="high">{{ weather.main.temp_max }}</div>
-          <div class="low">{{ weather.main.temp_min }}</div>
+          <div class="high">High: {{ Math.round(weather.main.temp_max) }}</div>
+          <div class="low">Low: {{ Math.round(weather.main.temp_max) }}</div>
+          <div class="wind">Wind speed: {{weather.wind.speed}} km/h</div>
+          <div class="pressure">Pressure: {{weather.main.pressure}} hPa</div>
+          <div class="humidity">Humidity: {{weather.main.humidity}}%</div>
         </div>
       </div>
     </main>
@@ -56,10 +59,8 @@ export default {
       .then((res) => {
         this.weather = res.data;
         this.iconSrc = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
-        console.log(this.iconSrc);
       })
       .catch((error) => console.log(error));
-    // console.log(this.weather);
   },
 
   methods: {
@@ -71,7 +72,8 @@ export default {
           .then((res) => {
             this.weather = res.data;
             this.iconSrc = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
-            console.log(this.iconSrc);
+            this.query = ''
+            
           })
 
           .catch((err) => console.log(err));
@@ -90,10 +92,9 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-body {
   font-family: "monserat", sans-serif;
 }
+
 #app {
   background-image: url("./assets/cloudy.jpeg");
   background-size: cover;
@@ -114,8 +115,8 @@ main {
   );
 }
 .search-box {
-  width: 100%;
-  margin-bottom: 30px;
+  display: table;
+  margin: 0 auto;
 }
 .search-box .search-bar {
   display: block;
@@ -130,13 +131,13 @@ main {
   background: none;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 0px 16px 0px 16px;
+  border-radius: 16px;
   transition: 0.4s;
 }
 .search-box .search-bar:focus {
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 16px 0px 16px 0px;
+  
 }
 .location-box .location {
   color: #fff;
@@ -159,7 +160,7 @@ main {
   display: inline-block;
   padding: 10px 25px;
   color: #fff;
-  font-size: 102px;
+  font-size: 50px;
   font-weight: 900;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 255, 255, 0.25);
