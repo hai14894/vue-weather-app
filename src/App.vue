@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       api_key: "6fbbe641ce030c39837ac25233abca8c",
-      url: "http://api.openweathermap.org/data/2.5/weather?q=",
+      url: "https://api.openweathermap.org/data/2.5/weather?q=",
       query: "",
       weather: {},
       iconSrc: "",
@@ -67,7 +67,7 @@ export default {
       .get(`${this.url}Sydney&appid=${this.api_key}&units=metric`)
       .then((res) => {
         this.weather = res.data;
-        this.iconSrc = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
+        this.iconSrc = `https://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
       })
       .catch((error) => console.log(error));
   },
